@@ -9,15 +9,15 @@ function query(queryString, cbFunc) {
         password: process.env.MYSQL_PASSWORD,
         database: process.env.MYSQL_DATABASE,
     });
-    connection.query(queryString, (error,result) => {
-        cbFunc(setResponse(error, result));
+    connection.query(queryString, (err, result) => {
+        cbFunc(setResponse(err, result));
     });
 }
 
-function setResponse(error, result) {
+function setResponse(error, results) {
     return {
         error: error,
-        result: result ? result : null,
+        results: results ? results : null,
     };
 }
 

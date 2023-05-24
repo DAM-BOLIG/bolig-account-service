@@ -36,9 +36,7 @@ function getUser(name, password, cbFunc){
 function isValidUser(name, cbFunc){
     const query = `SELECT * FROM users WHERE Name = '${name}'`;
     const checkUsrcbFunc = (response) => {
-        const isValidUser = response.results
-            ? !(response.results.rowCount > 1)
-            : null;
+        const isValidUser = response.results ? !(response.results.length > 0) : null;
         
         cbFunc(response.error, isValidUser);
     };
