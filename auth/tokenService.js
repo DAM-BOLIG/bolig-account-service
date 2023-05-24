@@ -29,8 +29,8 @@ function grantTypeAllowed(clientID, grantType, cbFunc) {
     cbFunc(false, true);
 }
 
-function getUser(username, password, cbFunc) {
-    userDB.getUser(username, password, cbFunc);
+function getUser(name, password, cbFunc) {
+    userDB.getUser(name, password, cbFunc);
 }
 
 function saveAccessToken(accessToken, clientID, expires, user, cbFunc) {

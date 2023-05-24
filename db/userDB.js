@@ -26,8 +26,8 @@ function getUser(name, password, cbFunc){
     Mysqlpool.query(getUserQuery, response => {
         cbFunc(
             false,
-            response.results && response.results.rowCount === 1
-                ? response.results.rows[0]
+            response.results && response.results.length === 1
+                ? response.results[0]
                 : null
             );
     });

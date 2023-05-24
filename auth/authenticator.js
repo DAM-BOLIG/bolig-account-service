@@ -20,7 +20,7 @@ function registerUser(req, res){
         } 
     
         userDB.register(req.body.name, req.body.password, req.body.email, req.body.phonenumber, (response) => {
-            sendResponse(res, response.error === undefined ? "Succes!!" : "something, went wrong", response.error);
+            sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
         });
     });
 }
