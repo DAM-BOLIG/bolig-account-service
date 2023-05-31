@@ -10,14 +10,12 @@ module.exports = (injectedMysqlPool) => {
 };
 
 function addAccestoken(accesToken, user, cbFunc){
-    const getUserQuery = `INSERT INTO access_tokens (access_token, User_ID) VALUES ('${accesToken}', '${user}')`;
-    MysqlPool.query(getUserQuery, (response) => {
-        cbFunc(response.error);
-    });
+    const getUserQuery = `INSERT INTO access_token (access_token, UID) VALUES ('${accesToken}', '${user}')`;
+    MysqlPool.query(getUserQuery, cbFunc);
 }
 
 function getUidFromToken(token, cbFunc){
-    const getUid = `SELECT * FROM access_tokens WHERE access_token = '${token}'`;
+    const getUid = `SELECT * FROM old_access_tokens WHERE access_token = '${token}'`;
     MysqlPool.query(getUid, (response) => {
         const uid = 
             response.results && response.results.rowCount === 1

@@ -1,5 +1,4 @@
 //const { response } = require("express");
-
 let Mysqlpool;
 
 module.exports = (injectedMysqlPool) => {
@@ -22,15 +21,11 @@ function register(name, password, email, phonenumber, cbFunc){
 
 function getUser(name, password, cbFunc){
     var shaPass = encrypt.createHash("sha256").update(password).digest("hex");
-    getUserQuery = `SELECT * FROM users WHERE Name = '${name}' AND User_Password = '${shaPass}'`;
-    Mysqlpool.query(getUserQuery, response => {
-        cbFunc(
-            false,
-            response.results && response.results.length === 1
-                ? response.results[0]
-                : null
-            );
-    });
+    getUserQuery = `SELECT users.UID, brands.BrandName FROM users 
+    JOIN Permision ON users.UID = Permision.UID
+    JOIN brands ON brands.BrandID = Permision.BrandID 
+    WHERE Name = '${name}' AND User_Password = '${shaPass}' `;
+    Mysqlpool.query(getUserQuery, cbFunc);
 }
 
 function isValidUser(name, cbFunc){
