@@ -11,6 +11,7 @@ module.exports = (injectedUserDB, injectedTokenDB) => {
     return {
         registerUser,
         login,
+        authenticateToken
     }
 };
 
@@ -41,16 +42,17 @@ function login(req, res){
         }
 
         const responseUser = response.results;
-        let user = []
+        let user = {UID: responseUser[0].UID, BrandName: responseUser[0].BrandName};
+        /*
         for (let i = 0; i < responseUser; i++){
             user.push({
                 uid: responseUser[i].UID,
                 brand: responseUser[i].BrandName,
             });
         }; 
-
+        */
         const accessToken = generateaccestoken(user);
-        const refreshToken = jwt.sign({user}, process.env.REFRESH_TOKEN_SECRET);
+        const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
         tokenDB.addAccestoken(refreshToken, response.results[0].UID, (response) => {
             if (response.error !== null){
                 sendResponse(res, "something went wrong", response.error);
@@ -61,8 +63,22 @@ function login(req, res){
     });
 };
 
+function authenticateToken(req, res, next){
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    
+    if (token === null) return res.sendStatus(401);
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403);
+
+        req.user = user;
+        next();
+    });
+}
+
 function generateaccestoken(user){
-    return jwt.sign({user}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'});
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'});
 }
 
 function sendResponse(res, message, error){

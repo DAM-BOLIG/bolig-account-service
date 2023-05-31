@@ -35,10 +35,12 @@ const testAPIRoutes = require('./test/testAPIRoutes.js')(
 
 // Auth and Api routes
 const authenticator = require('./auth/authenticator.js')(userDB, tokenDB);
+const token = require('./auth/tokens.js')(userDB, tokenDB);
 const permission = require('./auth/permission.js')(tokenDB, permissionDB);
 const routes = require('./routes/routes.js')(
     express.Router(),
     authenticator,
+    token,
     permission
 );
 

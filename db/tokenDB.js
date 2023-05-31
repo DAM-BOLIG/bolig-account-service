@@ -6,8 +6,19 @@ module.exports = (injectedMysqlPool) => {
     return {
         addAccestoken,
         getUidFromToken,
+        isTokenValid,
     };
 };
+
+function isTokenValid(token, cbFunc){
+    const query = `SELECT * FROM access_token WHERE access_token = '${token}'`;
+    const checkUsrcbFunc = (response) => {
+        const isValidtoken = response.results ? (response.results.length > 0) : null;
+        
+        cbFunc(response.error, isValidtoken);
+    };
+    MysqlPool.query(query, checkUsrcbFunc);
+}
 
 function addAccestoken(accesToken, user, cbFunc){
     const getUserQuery = `INSERT INTO access_token (access_token, UID) VALUES ('${accesToken}', '${user}')`;
@@ -24,3 +35,4 @@ function getUidFromToken(token, cbFunc){
         cbFunc(uid);
     });
 }
+
