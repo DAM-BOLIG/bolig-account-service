@@ -63,7 +63,7 @@ function login(req, res){
     });
 };
 
-function authenticateToken(req, res, next){
+function authenticateToken(req, res){
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     
@@ -73,12 +73,12 @@ function authenticateToken(req, res, next){
         if (err) return res.sendStatus(403);
 
         req.user = user;
-        next();
+        sendResponse(res, user, null);
     });
 }
 
 function generateaccestoken(user){
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'});
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1d'});
 }
 
 function sendResponse(res, message, error){

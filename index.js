@@ -5,6 +5,7 @@
  const permissionDB = require('./db/permissionDB.js')(MysqlPool);
 
 
+
 // imports for OAuth2.0 
 /*
 const oAuthService = require('./auth/tokenService.js')(userDB, tokenDB);
@@ -37,10 +38,12 @@ const testAPIRoutes = require('./test/testAPIRoutes.js')(
 const authenticator = require('./auth/authenticator.js')(userDB, tokenDB);
 const token = require('./auth/tokens.js')(userDB, tokenDB);
 const permission = require('./auth/permission.js')(tokenDB, permissionDB);
+const verifyToken = require('./tokenauth/verifytoken.js');
 const routes = require('./routes/routes.js')(
     express.Router(),
     authenticator,
     token,
+    verifyToken,
     permission
 );
 
