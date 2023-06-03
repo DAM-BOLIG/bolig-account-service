@@ -41,8 +41,8 @@ function login(req, res){
             sendResponse(res, "wrong Username or Password", response.error);
         }
 
-        const responseUser = response.results;
-        let user = {UID: responseUser[0].UID, BrandName: responseUser[0].BrandName};
+        const responseUser = response.results[0];
+        let user = {UID: responseUser[0].UID, Role: responseUser[0].Role};
         /*
         for (let i = 0; i < responseUser; i++){
             user.push({
@@ -53,7 +53,7 @@ function login(req, res){
         */
         const accessToken = generateaccestoken(user);
         const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
-        tokenDB.addAccestoken(refreshToken, response.results[0].UID, (response) => {
+        tokenDB.addAccestoken(refreshToken, responseUser[0].UID, (response) => {
             if (response.error !== null){
                 sendResponse(res, "something went wrong", response.error);
                 return;

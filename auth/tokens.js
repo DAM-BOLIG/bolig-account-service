@@ -27,7 +27,7 @@ function checkRefreshToken(req, res){
                 sendResponse(res, "Invalid refresh token", err);
                 return;
             }
-            let user = {UID: userInfo.UID, BrandName: userInfo.BrandName};
+            let user = {UID: userInfo.UID, Role: userInfo.Role};
             const accessToken = generateAccessToken(user);
             res.json({accessToken: accessToken});
         });
@@ -35,7 +35,7 @@ function checkRefreshToken(req, res){
 };
 
 function generateAccessToken(user){
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'});
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1day'});
 }
 
 function sendResponse(res, message, error){

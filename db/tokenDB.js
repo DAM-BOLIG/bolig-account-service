@@ -11,7 +11,7 @@ module.exports = (injectedMysqlPool) => {
 };
 
 function isTokenValid(token, cbFunc){
-    const query = `SELECT * FROM access_token WHERE access_token = '${token}'`;
+    const query = `SELECT * FROM access_token WHERE Access_Token = '${token}'`;
     const checkUsrcbFunc = (response) => {
         const isValidtoken = response.results ? (response.results.length > 0) : null;
         
@@ -21,12 +21,12 @@ function isTokenValid(token, cbFunc){
 }
 
 function addAccestoken(accesToken, user, cbFunc){
-    const getUserQuery = `INSERT INTO access_token (access_token, UID) VALUES ('${accesToken}', '${user}')`;
+    const getUserQuery = `INSERT INTO access_token (Access_Token, UID) VALUES ('${accesToken}', '${user}')`;
     MysqlPool.query(getUserQuery, cbFunc);
 }
 
 function getUidFromToken(token, cbFunc){
-    const getUid = `SELECT * FROM old_access_tokens WHERE access_token = '${token}'`;
+    const getUid = `SELECT * FROM access_tokens WHERE Access_Token = '${token}'`;
     MysqlPool.query(getUid, (response) => {
         const uid = 
             response.results && response.results.rowCount === 1
