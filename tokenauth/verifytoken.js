@@ -3,17 +3,19 @@ const env = require('dotenv').config();
 
 module.exports = { authenticateToken };
 
-function authenticateToken(req, res){
+function authenticateToken(req, res, next){
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     
     if (token === null) return res.sendStatus(401);
 
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, {Role: req.body.Role } ,(err, user) => {
         if (err) return res.sendStatus(403);
+        if (user.Role !== req.body.Role) return sendResponse(res, "Thsi user has no permission", "invalid user");
 
         req.user = user;
-        sendResponse(res, user, null);
+        next();
+        //sendResponse(res, user, null);
     });
 }
 
