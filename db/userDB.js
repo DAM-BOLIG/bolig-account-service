@@ -28,7 +28,7 @@ function getUser(name, password, cbFunc){
 function isValidUser(name, cbFunc){
     const query = `CALL isValidUser("${name}") `;
     const checkUsrcbFunc = (response) => {
-        const isValidUser = response.results ? !(response.results.length > 0) : null;
+        const isValidUser = response.results ? !(response.results[0].length > 0) : null;
         
         cbFunc(response.error, isValidUser);
     };

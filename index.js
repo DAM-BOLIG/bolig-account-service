@@ -26,7 +26,8 @@ app.oauth = OAuth2Server({
 
 
 // Test
-/*const testAPiService = require('./test/testAPIService.js');
+const testAPiService = require('./test/testAPIService.js');
+/*
 const testAPIRoutes = require('./test/testAPIRoutes.js')(
     express.Router(),
     app,
@@ -44,7 +45,8 @@ const routes = require('./routes/routes.js')(
     authenticator,
     token,
     verifyToken,
-    permission
+    permission,
+    testAPiService
 );
 
 

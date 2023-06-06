@@ -37,8 +37,9 @@ function login(req, res){
             sendResponse(res, "something went wrong", response.error);
             return;
         }
-        else if (response.results.length === 0){
+        else if (response.results[0].length === 0){
             sendResponse(res, "wrong Username or Password", response.error);
+            return;
         }
 
         const responseUser = response.results[0];
