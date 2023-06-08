@@ -20,11 +20,17 @@ function addRole(Role, res){
     });
 };
 
-function addPermission(RoleID, userID, res){
-    const query = `INSERT INTO permission (RoleID, UID) VALUES ('${RoleID}', '${userID}')`;
-    MysqlPool.query(query, (response) => {
-        res(response.error);
-    });
+function addPermission(Name, Role, cbFunc){
+    /*
+    const query = `SET @UID = (SELECT UID FROM users WHERE Name = '${UserName}');
+                    SET @RoleID = (SELECT RoleID FROM roles WHERE Role = '${Role}');
+                    INSERT INTO permission(RoleID, UID) VALUES (@RoleID, @UID);`;
+    */
+    const query = `SET @UID = (SELECT UID FROM users WHERE Name = '${Name}');
+                    SET @RoleID = (SELECT RoleID FROM roles WHERE Role = '${Role}');
+                    INSERT INTO permission(RoleID, UID) VALUES (@RoleID, @UID);`;
+
+    MysqlPool.query(query,cbFunc);
 };
 
 function removePermission(RoleID, userID, res){

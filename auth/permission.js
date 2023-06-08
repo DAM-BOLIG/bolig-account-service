@@ -31,7 +31,7 @@ function createRole(req, res){
 };
 
 function addPermission(req,res){
-    permissionDB.addPermission(req.body.userID, req.body.RoleID, (response) => {
+    permissionDB.addPermission(req.body.Name, req.body.Role, (response) => {
         sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
     });
 };
