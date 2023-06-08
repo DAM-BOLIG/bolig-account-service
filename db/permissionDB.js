@@ -7,27 +7,35 @@ module.exports = (injectedMysqlPool) => {
 
     return {
         addPermission,
-        addBrand,
-        isBrandValid,
+        addRole,
+        isRoleValid,
+        removePermission,
     };
 };
 
-function addBrand(brandName, res){
-    const query = `INSERT INTO brands (BrandName) VALUES ('${brandName}')`;
+function addRole(Role, res){
+    const query = `INSERT INTO roles (Role) VALUES ('${Role}')`;
     MysqlPool.query(query, (response) => {
         res(response.error);
     });
 };
 
-function addPermission(userID, brandID, res){
-    const query = `INSERT INTO Permision (BrandID, UID) VALUES ('${userID}', '${brandID}')`;
+function addPermission(RoleID, userID, res){
+    const query = `INSERT INTO permission (RoleID, UID) VALUES ('${RoleID}', '${userID}')`;
     MysqlPool.query(query, (response) => {
         res(response.error);
     });
 };
 
-function isBrandValid(brandName, res){
-    const query = `SELECT * FROM brands WHERE BrandName = '${brandName}'`;
+function removePermission(RoleID, userID, res){
+    const query = `DELETE FROM permission WHERE RoleID = '${RoleID}' AND UID = '${userID}'`;
+    MysqlPool.query(query, (response) => {
+        res(response.error);
+    });
+};
+
+function isRoleValid(Role, res){
+    const query = `SELECT * FROM roles WHERE Role = '${Role}'`;
     MysqlPool.query(query, (response) => {
         const isValidBrand = response.results ? !(response.results.length > 0) : null;
         res(response.error, isValidBrand);

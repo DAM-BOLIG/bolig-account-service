@@ -8,6 +8,8 @@ module.exports = (injectedMysqlPool) => {
         register,
         getUser,
         isValidUser,
+        getusers,
+        userLookup,
     };
 };
 
@@ -24,6 +26,14 @@ function getUser(name, password, cbFunc){
     getUserQuery = `CALL getUserRole('${name}','${shaPass}')`;
     Mysqlpool.query(getUserQuery, cbFunc);
 }
+
+function getusers(cbFunc){
+
+};
+
+function userLookup(name, cbFunc){
+
+};
 
 function isValidUser(name, cbFunc){
     const query = `CALL isValidUser("${name}") `;

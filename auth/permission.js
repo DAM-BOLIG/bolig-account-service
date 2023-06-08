@@ -1,41 +1,55 @@
 let tokenDB;
+let roleDB;
 let permissionDB;
 
-module.exports = (injectedTokenDB, injectedPermissionDB) => {
+module.exports = (injectedTokenDB,  injectedRoleDB, injectedPermissionDB) => {
     tokenDB = injectedTokenDB;
+    roleDB = injectedRoleDB;
     permissionDB = injectedPermissionDB;
 
     return {
-        createBrand,
+        createRole,
         addPermission,
-        grantPermission,
+        removePermission,
     };
 }
 
-function createBrand(req, res){
-    permissionDB.isBrandValid(req.body.brandName, (error, isValidBrand) => {
-        if (error || !isValidBrand){
+function createRole(req, res){
+    permissionDB.isRoleValid(req.body.Role, (error, isValidRole) => {
+        if (error || !isValidRole){
             const message = error 
                 ? "something went wrong" 
-                : 'brand already exists';
+                : 'Role already exists';
             sendResponse(res, message, error);
             return;
         } 
     
-        permissionDB.addBrand(req.body.brandName, (response) => {
+        permissionDB.addRole(req.body.Role, (response) => {
             sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
         });
     });
 };
 
 function addPermission(req,res){
-    permissionDB.addPermission(req.body.userID, req.body.brandID, (response) => {
+    permissionDB.addPermission(req.body.userID, req.body.RoleID, (response) => {
         sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
     });
 };
 
-function grantPermission(req, res, next){
+function removePermission(req, res, next){
+    permissionDB.isRoleValid(req.body.Role, (error, isValidRole) => {
+        if (error || isValidRole){
+            const message = error 
+                ? "something went wrong" 
+                : 'no such Role';
+            sendResponse(res, message, error);
+            return;
+        }
 
+        permissionDB.removePermission(req.body.userID, req.body.brandID, (response) => {
+            sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
+        });
+    });
 };
 
 function sendResponse(res, message, error){
