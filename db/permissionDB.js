@@ -10,6 +10,8 @@ module.exports = (injectedMysqlPool) => {
         addRole,
         isRoleValid,
         removePermission,
+        findRoleID,
+        findUserID,
     };
 };
 
@@ -22,15 +24,22 @@ function addRole(Role, res){
 
 function addPermission(Name, Role, cbFunc){
     /*
-    const query = `SET @UID = (SELECT UID FROM users WHERE Name = '${UserName}');
-                    SET @RoleID = (SELECT RoleID FROM roles WHERE Role = '${Role}');
+    const query = `SET @UID = (SELECT UID FROM users WHERE Name = '${Name}')
+                    SET @RoleID = (SELECT RoleID FROM roles WHERE Role = '${Role}')
                     INSERT INTO permission(RoleID, UID) VALUES (@RoleID, @UID);`;
     */
-    const query = `SET @UID = (SELECT UID FROM users WHERE Name = '${Name}');
-                    SET @RoleID = (SELECT RoleID FROM roles WHERE Role = '${Role}');
-                    INSERT INTO permission(RoleID, UID) VALUES (@RoleID, @UID);`;
-
+    const query = `INSERT INTO permission(RoleID, UID) VALUES (${Role},${Name});`;
     MysqlPool.query(query,cbFunc);
+};
+
+function findRoleID(Role, cbFunc){
+    const query = `SELECT RoleID FROM roles WHERE Role = '${Role}';`;
+    MysqlPool.query(query, cbFunc);
+};
+
+function findUserID(Name, cbFunc){
+    const query = `SELECT UID FROM users WHERE Name = '${Name}'`;
+    MysqlPool.query(query, cbFunc);
 };
 
 function removePermission(RoleID, userID, res){
