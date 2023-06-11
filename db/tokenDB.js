@@ -7,6 +7,7 @@ module.exports = (injectedMysqlPool) => {
         addAccestoken,
         getUidFromToken,
         isTokenValid,
+        removeAccestoken,
     };
 };
 
@@ -24,6 +25,11 @@ function addAccestoken(accesToken, user, cbFunc){
     const getUserQuery = `INSERT INTO access_token (Access_Token, UID) VALUES ('${accesToken}', '${user}')`;
     MysqlPool.query(getUserQuery, cbFunc);
 }
+
+function removeAccestoken(accesToken, cbFunc){
+    const getUserQuery = `DELETE FROM access_token WHERE Access_Token = '${accesToken}'`;
+    MysqlPool.query(getUserQuery, cbFunc);
+};
 
 function getUidFromToken(token, cbFunc){
     const getUid = `SELECT * FROM access_tokens WHERE Access_Token = '${token}'`;

@@ -8,6 +8,7 @@ module.exports = (injectedMysqlPool) => {
     return {
         addPermission,
         addRole,
+        removeRole,
         isRoleValid,
         removePermission,
         findRoleID,
@@ -20,6 +21,10 @@ function addRole(Role, res){
     MysqlPool.query(query, (response) => {
         res(response.error);
     });
+};
+
+function removeRole(Role, res){
+
 };
 
 function addPermission(Name, Role, cbFunc){

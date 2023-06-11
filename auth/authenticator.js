@@ -11,7 +11,8 @@ module.exports = (injectedUserDB, injectedTokenDB) => {
     return {
         registerUser,
         login,
-        authenticateToken
+        authenticateToken,
+        logout,
     }
 };
 
@@ -61,6 +62,13 @@ function login(req, res){
             }
             res.json({accessToken: accessToken, refreshToken: refreshToken});
         });
+    });
+};
+
+function logout(req, res){
+    const refreshToken = req.body.token;
+    tokenDB.removeAccestoken(refreshToken, (response) => {
+        sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
     });
 };
 
