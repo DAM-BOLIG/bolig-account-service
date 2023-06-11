@@ -42,12 +42,12 @@ function findUserID(Name, cbFunc){
     MysqlPool.query(query, cbFunc);
 };
 
-function removePermission(RoleID, userID, res){
+
+function removePermission(RoleID, userID, cbFunc){
     const query = `DELETE FROM permission WHERE RoleID = '${RoleID}' AND UID = '${userID}'`;
-    MysqlPool.query(query, (response) => {
-        res(response.error);
-    });
+    MysqlPool.query(query, cbFunc);
 };
+
 
 function isRoleValid(Role, res){
     const query = `SELECT * FROM roles WHERE Role = '${Role}'`;

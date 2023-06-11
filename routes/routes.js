@@ -5,7 +5,7 @@ module.exports= (router, authenticator, token, verifyToken, permission, testAPiS
     router.post("/verifytoken", verifyToken.authenticateToken, testAPiService.helloWorld);
     router.post("/createRole", permission.createRole);
     router.post("/addPermission", permission.addPermission);
-    router.post("/removePermission", permission.removePermission);
+    router.post("/removePermissionByName", permission.removePermissionByName);
 
     return router;
 };
