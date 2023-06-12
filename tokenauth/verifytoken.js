@@ -9,7 +9,7 @@ function authenticateToken(req, res, next){
     
     if (token === null) return res.sendStatus(401);
 
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, {Role: req.body.Role } ,(err, user) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, {Role: 'Admin' /*req.body.Role*/ } ,(err, user) => {
         if (err) return res.sendStatus(403);
         if (user.Role !== req.body.Role) return sendResponse(res, "Thsi user has no permission", "invalid user");
 

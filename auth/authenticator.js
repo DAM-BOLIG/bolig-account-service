@@ -1,5 +1,6 @@
 let userDB
 let tokenDB
+const { is } = require('express/lib/request');
 const jwt = require('jsonwebtoken');
 const env = require('dotenv').config();
 
@@ -11,10 +12,17 @@ module.exports = (injectedUserDB, injectedTokenDB) => {
     return {
         registerUser,
         login,
-        authenticateToken
+        authenticateToken,
+        logout,
+        changeUsername,
+        changePassword,
+        changeEmail,
+        changePhonenumber,
     }
 };
 
+
+// user registration function
 function registerUser(req, res){
     userDB.isValidUser(req.body.name, (error, isValidUser) => {
         if (error || !isValidUser){
@@ -31,6 +39,8 @@ function registerUser(req, res){
     });
 }
 
+
+// user login and logout functions
 function login(req, res){
     userDB.getUser(req.body.name, req.body.password, (response) => {
         if (response.error !== null){
@@ -64,6 +74,89 @@ function login(req, res){
     });
 };
 
+function logout(req, res){
+    const refreshToken = req.body.token;
+    tokenDB.removeAccestoken(refreshToken, (response) => {
+        sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
+    });
+};
+
+
+// db functions to change user information
+function changeUsername(req, res){
+    userDB.isUserValid(req.body.name, req.body.password, (error, isUserValid) => {
+        if (error || !isUserValid){
+            const message = error 
+                ? "something went wrong" 
+                : 'wrong username or password';
+            sendResponse(res, message, error);
+            return;
+        } 
+
+        userDB.isValidUser(req.body.newname, (error, isValidUser) => {
+            if (error || !isValidUser){
+                const message = error 
+                    ? "something went wrong" 
+                    : 'name already in use already exists';
+                sendResponse(res, message, error);
+                return;
+            }
+
+            userDB.changeUsername(req.body.UID, req.body.newname, (response) => {
+                sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
+            });
+        });
+
+    });
+}
+
+function changePassword(req, res){
+    userDB.isUserValid(req.body.name, req.body.password, (error, isUserValid) => {
+        if (error || !isUserValid){
+            const message = error 
+                ? "something went wrong" 
+                : 'wrong username or password';
+            sendResponse(res, message, error);
+            return;
+        }
+        userDB.changePassword(req.body.UID, req.body.newpassword, (response) => {
+            sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
+        });
+    });
+};
+
+function changeEmail(req, res){
+    userDB.isUserValid(req.body.name, req.body.password, (error, isUserValid) => {
+        if (error || !isUserValid){
+            const message = error 
+                ? "something went wrong" 
+                : 'wrong username or password';
+            sendResponse(res, message, error);
+            return;
+        }
+        userDB.changeEmail(req.body.UID, req.body.newemail, (response) => {
+            sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
+        });
+    });
+}
+
+function changePhonenumber(req, res){
+    userDB.isUserValid(req.body.name, req.body.password, (error, isUserValid) => {
+        if (error || !isUserValid){
+            const message = error 
+                ? "something went wrong" 
+                : 'wrong username or password';
+            sendResponse(res, message, error);
+            return;
+        }
+        userDB.changePhonenumber(req.body.UID, req.body.newphonenumber, (response) => {
+            sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
+        });
+    });
+}
+
+
+// login token functions
 function authenticateToken(req, res){
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -82,6 +175,8 @@ function generateaccestoken(user){
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1d'});
 }
 
+
+// response functions
 function sendResponse(res, message, error){
     res.status(error !== undefined ? 400 : 200).json({
         message: message,
