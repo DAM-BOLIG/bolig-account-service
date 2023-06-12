@@ -11,6 +11,7 @@ module.exports = (injectedTokenDB,  injectedRoleDB, injectedPermissionDB) => {
 
     return {
         createRole,
+        removeRole,
         addPermission,
         removePermissionByName,
         removePermissionByID,
@@ -28,7 +29,22 @@ function createRole(req, res){
         } 
     
         permissionDB.addRole(req.body.Role, (response) => {
-            sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
+            sendResponse(res, response.error === null ? "Role Added!!" : "something, went wrong", response.error);
+        });
+    });
+};
+
+function removeRole(req, res){
+    permissionDB.isRoleValid(req.body.Role, (error, isValidRole) => {
+        if (error || isValidRole){
+            const message = error 
+                ? "something went wrong" 
+                : 'no such Role';
+            sendResponse(res, message, error);
+            return;
+        }
+        permissionDB.removeRole(req.body.Role, (response) => {
+            sendResponse(res, response.error === null ? "Role Removed!!" : "something, went wrong", response.error);
         });
     });
 };

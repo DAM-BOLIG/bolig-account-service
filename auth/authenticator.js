@@ -13,6 +13,10 @@ module.exports = (injectedUserDB, injectedTokenDB) => {
         login,
         authenticateToken,
         logout,
+        changeUsername,
+        changePassword,
+        changeEmail,
+        changePhonenumber,
     }
 };
 
@@ -71,6 +75,22 @@ function logout(req, res){
         sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
     });
 };
+
+function changeUsername(req, res){
+
+}
+
+function changePassword(req, res){
+
+};
+
+function changeEmail(req, res){
+
+}
+
+function changePhonenumber(req, res){
+
+}
 
 function authenticateToken(req, res){
     const authHeader = req.headers['authorization'];

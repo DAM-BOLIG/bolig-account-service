@@ -16,15 +16,14 @@ module.exports = (injectedMysqlPool) => {
     };
 };
 
-function addRole(Role, res){
+function addRole(Role, cbFunc){
     const query = `INSERT INTO roles (Role) VALUES ('${Role}')`;
-    MysqlPool.query(query, (response) => {
-        res(response.error);
-    });
+    MysqlPool.query(query, cbFunc);
 };
 
-function removeRole(Role, res){
-
+function removeRole(Role, cdFunc){
+    const query = `DELETE FROM roles WHERE Role = '${Role}'`;
+    MysqlPool.query(query, cbFunc);
 };
 
 function addPermission(Name, Role, cbFunc){
