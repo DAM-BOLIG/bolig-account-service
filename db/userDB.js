@@ -9,10 +9,15 @@ module.exports = (injectedMysqlPool) => {
         getUser,
         getusers,
         userLookup,
+
         changeUsername,
         changePassword,
         changeEmail,
         changePhonenumber,
+
+        deleteUser,
+        forceDeleteUser,
+        
         isUserValid,
         isValidUser,
     };
@@ -53,6 +58,19 @@ function changeEmail(UID, email, cbFunc){
 
 function changePhonenumber(UID, phonenumber, cbFunc){
     const query = `UPDATE users SET Phonenumber = '${phonenumber}' WHERE UID = '${UID}'`;
+    Mysqlpool.query(query, cbFunc);
+}
+
+
+// delete user
+function deleteUser(name, password, cbFunc){
+    var shaPass = encrypt.createHash("sha256").update(password).digest("hex");
+    const query = `DELETE FROM users WHERE Name = '${name}' AND User_Password = '${shaPass}'`;
+    Mysqlpool.query(query, cbFunc);
+}
+
+function forceDeleteUser(name, cbFunc){
+    const query = `DELETE FROM users WHERE Name = '${name}'`;
     Mysqlpool.query(query, cbFunc);
 }
 

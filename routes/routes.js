@@ -10,6 +10,10 @@ module.exports= (router, authenticator, token, verifyToken, permission, testAPiS
     router.post("/changeEmail", authenticator.changeEmail);
     router.post("/changePhonenumber", authenticator.changePhonenumber);
 
+    // delete user
+    router.post("/deleteUser", permission.removePermissionOnlyName,authenticator.deleteUser);
+    router.post("/forceDeleteUser", verifyToken.authenticateToken, permission.removePermissionOnlyName, authenticator.forceDeleteUser);
+
     // tokens
     router.post("/refreshtoken", token.checkRefreshToken);
 
@@ -17,9 +21,10 @@ module.exports= (router, authenticator, token, verifyToken, permission, testAPiS
     router.post("/verifytoken", verifyToken.authenticateToken, testAPiService.helloWorld);
     
     // permissions and roles
-    router.post("/createRole", permission.createRole);
-    router.post("/addPermission", permission.addPermission);
-    router.post("/removePermissionByName", permission.removePermissionByName);
+    router.post("/createRole", verifyToken.authenticateToken, permission.createRole);
+    router.post("/removeRole", verifyToken.authenticateToken, permission.removeRole);
+    router.post("/addPermission", verifyToken.authenticateToken, permission.addPermission);
+    router.post("/removePermissionByName", verifyToken.authenticateToken, permission.removePermissionByName);
 
     return router;
 };

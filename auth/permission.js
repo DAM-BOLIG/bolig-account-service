@@ -14,6 +14,7 @@ module.exports = (injectedTokenDB,  injectedRoleDB, injectedPermissionDB) => {
         removeRole,
         addPermission,
         removePermissionByName,
+        removePermissionOnlyName,
         removePermissionByID,
     };
 }
@@ -78,6 +79,19 @@ function removePermissionByName(req, res){
         });
     });
 };
+
+function removePermissionOnlyName(req, res, next){
+    permissionDB.findUserID(req.body.name, (response) => {
+        const userID = response.results[0].UID;
+        permissionDB.removePermissionOnlyName(userID, (response) => {
+            if (response.error !== null){
+                sendResponse(res, "something, went wrong", response.error);
+                return;
+            }
+            next();
+        });
+    });
+}
 
 function removePermissionByID(req, res){
     permissionDB.isRoleValid(req.body.Role, (error, isValidRole) => {
