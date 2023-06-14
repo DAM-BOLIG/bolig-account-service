@@ -14,10 +14,14 @@ module.exports = (injectedUserDB, injectedTokenDB) => {
         login,
         authenticateToken,
         logout,
+
         changeUsername,
         changePassword,
         changeEmail,
         changePhonenumber,
+
+        deleteUser,
+        forceDeleteUser,
     }
 };
 
@@ -155,6 +159,27 @@ function changePhonenumber(req, res){
     });
 }
 
+// delete user functions
+function deleteUser(req, res){
+    userDB.isUserValid(req.body.name, req.body.password, (error, isUserValid) => {
+        if (error || !isUserValid){
+            const message = error 
+                ? "something went wrong" 
+                : 'wrong username or password';
+            sendResponse(res, message, error);
+            return;
+        }
+        userDB.deleteUser(req.body.name, req.body.password, (response) => {
+            sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
+        });
+    });
+}
+
+function forceDeleteUser(req, res){
+    userDB.forceDeleteUser(req.body.name, (response) => {
+        sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
+    });
+}
 
 // login token functions
 function authenticateToken(req, res){
