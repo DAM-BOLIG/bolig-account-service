@@ -13,6 +13,7 @@ module.exports = (injectedMysqlPool) => {
         removePermission,
         findRoleID,
         findUserID,
+        removePermissionOnlyName,
     };
 };
 
@@ -21,7 +22,7 @@ function addRole(Role, cbFunc){
     MysqlPool.query(query, cbFunc);
 };
 
-function removeRole(Role, cdFunc){
+function removeRole(Role, cbFunc){
     const query = `DELETE FROM roles WHERE Role = '${Role}'`;
     MysqlPool.query(query, cbFunc);
 };
@@ -49,6 +50,11 @@ function findUserID(Name, cbFunc){
 
 function removePermission(RoleID, userID, cbFunc){
     const query = `DELETE FROM permission WHERE RoleID = '${RoleID}' AND UID = '${userID}'`;
+    MysqlPool.query(query, cbFunc);
+};
+
+function removePermissionOnlyName(NameID, cbFunc){
+    const query = `DELETE FROM permission WHERE UID = '${NameID}'`;
     MysqlPool.query(query, cbFunc);
 };
 
