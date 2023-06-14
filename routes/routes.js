@@ -22,6 +22,7 @@ module.exports= (router, authenticator, token, verifyToken, permission, testAPiS
     
     // permissions and roles
     router.post("/createRole", verifyToken.authenticateToken, permission.createRole);
+    router.post("/removeRole", verifyToken.authenticateToken, permission.removeRole);
     router.post("/addPermission", verifyToken.authenticateToken, permission.addPermission);
     router.post("/removePermissionByName", verifyToken.authenticateToken, permission.removePermissionByName);
 

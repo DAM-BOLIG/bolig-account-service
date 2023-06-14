@@ -22,7 +22,7 @@ function addRole(Role, cbFunc){
     MysqlPool.query(query, cbFunc);
 };
 
-function removeRole(Role, cdFunc){
+function removeRole(Role, cbFunc){
     const query = `DELETE FROM roles WHERE Role = '${Role}'`;
     MysqlPool.query(query, cbFunc);
 };
