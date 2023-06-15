@@ -4,6 +4,8 @@
  const userDB = require('./db/userDB.js')(MysqlPool);
  const permissionDB = require('./db/permissionDB.js')(MysqlPool);
 
+const cors = require('cors');
+
 //Express
 const express = require('express');
 const app = express();
@@ -27,7 +29,7 @@ const routes = require('./routes/routes.js')(
     testAPiService
 );
 
-
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 //app.use(app.oauth.errorHandler());
