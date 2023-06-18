@@ -4,6 +4,8 @@ module.exports= (router, authenticator, token, verifyToken, permission, testAPiS
     router.post("/login", authenticator.login);
     router.post("/logout", authenticator.logout);
 
+    router.post("/getUsernameByID", authenticator.getUsernameByID);
+
     //edit user
     router.post("/changeUsername", authenticator.changeUsername);
     router.post("/changePassword", authenticator.changePassword);

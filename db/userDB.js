@@ -7,7 +7,7 @@ module.exports = (injectedMysqlPool) => {
     return {
         register,
         getUser,
-        getusers,
+        getUsersNameByuid,
         userLookup,
 
         changeUsername,
@@ -87,8 +87,9 @@ function isUserValid(name, password, cbFunc){
     Mysqlpool.query(query, validateUsrcbFunc);
 }
 
-function getusers(cbFunc){
-
+function getUsersNameByuid(UID, cbFunc){
+    const query = `SELECT Name FROM users WHERE UID = '${UID}' `;
+    Mysqlpool.query(query, cbFunc);
 };
 
 function userLookup(name, cbFunc){

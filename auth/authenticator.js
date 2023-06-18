@@ -15,6 +15,8 @@ module.exports = (injectedUserDB, injectedTokenDB) => {
         authenticateToken,
         logout,
 
+        getUsernameByID,
+
         changeUsername,
         changePassword,
         changeEmail,
@@ -73,7 +75,7 @@ function login(req, res){
                 sendResponse(res, "something went wrong", response.error);
                 return;
             }
-            res.json({accessToken: accessToken, refreshToken: refreshToken});
+            res.json({accessToken: accessToken, refreshToken: refreshToken, username: req.body.name});
         });
     });
 };
@@ -82,6 +84,21 @@ function logout(req, res){
     const refreshToken = req.body.token;
     tokenDB.removeAccestoken(refreshToken, (response) => {
         sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
+    });
+};
+
+function getUsernameByID(req, res){
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    
+    if (token === null) return res.sendStatus(401);
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403);
+        userDB.getUsersNameByuid(user.UID, (response) => {
+            sendResponse(res, response.results[0].Name, response.error);
+        });
+        //sendResponse(res, user, null);
     });
 };
 
