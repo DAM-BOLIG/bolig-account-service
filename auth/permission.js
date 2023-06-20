@@ -12,6 +12,7 @@ module.exports = (injectedTokenDB,  injectedRoleDB, injectedPermissionDB) => {
     return {
         createRole,
         removeRole,
+        getRoles,
         addPermission,
         removePermissionByName,
         removePermissionOnlyName,
@@ -92,6 +93,12 @@ function removePermissionOnlyName(req, res, next){
         });
     });
 }
+
+function getRoles(req, res){
+    permissionDB.getRoles((response) => {
+        sendResponse(res, response.results.length === null ? "No Results" : response.results, response.error );
+    });
+};
 
 function removePermissionByID(req, res){
     permissionDB.isRoleValid(req.body.Role, (error, isValidRole) => {

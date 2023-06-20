@@ -9,6 +9,7 @@ module.exports = (injectedMysqlPool) => {
         addPermission,
         addRole,
         removeRole,
+        getRoles,
         isRoleValid,
         removePermission,
         findRoleID,
@@ -27,6 +28,11 @@ function removeRole(Role, cbFunc){
     const query = `DELETE FROM roles WHERE Role = ?`;
     const value = [Role];
     MysqlPool.execute(query, value, cbFunc);
+};
+
+function getRoles(cbFunc){
+    const query = `SELECT * FROM roles`;
+    MysqlPool.query(query, cbFunc);
 };
 
 function addPermission(Name, Role, cbFunc){
