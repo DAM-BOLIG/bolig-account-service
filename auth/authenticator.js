@@ -24,6 +24,7 @@ module.exports = (injectedUserDB, injectedTokenDB) => {
 
         deleteUser,
         forceDeleteUser,
+        forceLogout,
     }
 };
 
@@ -84,6 +85,22 @@ function logout(req, res){
     const refreshToken = req.body.token;
     tokenDB.removeAccestoken(refreshToken, (response) => {
         sendResponse(res, response.error === null ? "Succes!!" : "something, went wrong", response.error);
+    });
+};
+
+function forceLogout(req, res, next){
+    userDB.getUIDNameByName(req.body.name, (response) => {
+        if (response.error !== null){
+            sendResponse(res, "something went wrong", response.error);
+            return;
+        }
+        tokenDB.forceRemoveAccestoken(response.results[0].UID, (response) => {
+            if (response.error !== null){
+                sendResponse(res, "something, went wrong", response.error);
+                return;
+            }
+            next();
+        });
     });
 };
 

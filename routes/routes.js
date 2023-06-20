@@ -7,14 +7,14 @@ module.exports= (router, authenticator, token, verifyToken, permission, testAPiS
     router.post("/getUsernameByID", authenticator.getUsernameByID);
 
     //edit user
-    router.post("/changeUsername", authenticator.changeUsername);
-    router.post("/changePassword", authenticator.changePassword);
-    router.post("/changeEmail", authenticator.changeEmail);
-    router.post("/changePhonenumber", authenticator.changePhonenumber);
+    router.post("/changeUsername", verifyToken.authenticateTokenUID ,authenticator.changeUsername);
+    router.post("/changePassword", verifyToken.authenticateTokenUID ,authenticator.changePassword);
+    router.post("/changeEmail", verifyToken.authenticateTokenUID ,authenticator.changeEmail);
+    router.post("/changePhonenumber", verifyToken.authenticateTokenUID ,authenticator.changePhonenumber);
 
     // delete user
     router.post("/deleteUser", permission.removePermissionOnlyName,authenticator.deleteUser);
-    router.post("/forceDeleteUser", verifyToken.authenticateToken, permission.removePermissionOnlyName, authenticator.forceDeleteUser);
+    router.post("/forceDeleteUser", verifyToken.authenticateToken, authenticator.forceLogout, permission.removePermissionOnlyName, authenticator.forceDeleteUser);
 
     // tokens
     router.post("/refreshtoken", token.checkRefreshToken);

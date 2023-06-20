@@ -14,6 +14,18 @@ function query(queryString, cbFunc) {
     });
 }
 
+function execute(queryString, values, cbFunc) {
+    const connection = mysql.createPool({
+        host: process.env.MYSQL_HOST,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        database: process.env.MYSQL_DATABASE,
+    });
+    connection.execute(queryString, values, (err, result) => {
+        cbFunc(setResponse(err, result));
+    });
+}
+
 function setResponse(error, results) {
     return {
         error: error,
@@ -23,4 +35,5 @@ function setResponse(error, results) {
 
 module.exports = {
     query,
+    execute,
 };
